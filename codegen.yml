@@ -1,0 +1,18 @@
+overwrite: true
+schema: "https://graphql.anilist.co/"
+documents: "src/**/*.graphql"
+generates:
+  src/generated/graphql.tsx:
+    plugins:
+      - "typescript"
+      - "typescript-operations"
+      - "typescript-react-apollo"
+      - "typescript-graphql-files-modules"
+      - "typescript-document-nodes"
+    config:
+      withHooks: true
+      withHOC: false
+      withComponent: false
+  ./graphql.schema.json:
+    plugins:
+      - "introspection"
