@@ -1,0 +1,10 @@
+query HomePage($startedAt: FuzzyDateInt, $completedAt: FuzzyDateInt){
+  MediaList(startedAt: $startedAt, completedAt: $completedAt) {
+    media{
+      title{
+        native
+      }
+      bannerImage
+    }
+  }
+}
