@@ -4307,6 +4307,15 @@ export type UserModData = {
   counts?: Maybe<Scalars['Json']>;
 };
 
+export type MediaFragment = (
+  { __typename?: 'Media' }
+  & Pick<Media, 'bannerImage'>
+  & { title?: Maybe<(
+    { __typename?: 'MediaTitle' }
+    & Pick<MediaTitle, 'native'>
+  )> }
+);
+
 export type HomePageQueryVariables = Exact<{
   startedAt?: Maybe<Scalars['FuzzyDateInt']>;
   completedAt?: Maybe<Scalars['FuzzyDateInt']>;
@@ -4319,28 +4328,28 @@ export type HomePageQuery = (
     { __typename?: 'MediaList' }
     & { media?: Maybe<(
       { __typename?: 'Media' }
-      & Pick<Media, 'bannerImage'>
-      & { title?: Maybe<(
-        { __typename?: 'MediaTitle' }
-        & Pick<MediaTitle, 'native'>
-      )> }
+      & MediaFragment
     )> }
   )> }
 );
 
-
+export const MediaFragmentDoc = gql`
+    fragment Media on Media {
+  title {
+    native
+  }
+  bannerImage
+}
+    `;
 export const HomePageDocument = gql`
     query HomePage($startedAt: FuzzyDateInt, $completedAt: FuzzyDateInt) {
   MediaList(startedAt: $startedAt, completedAt: $completedAt) {
     media {
-      title {
-        native
-      }
-      bannerImage
+      ...Media
     }
   }
 }
-    `;
+    ${MediaFragmentDoc}`;
 
 /**
  * __useHomePageQuery__

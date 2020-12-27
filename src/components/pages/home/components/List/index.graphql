@@ -1,0 +1,6 @@
+fragment Media on Media {
+    title{
+      native
+    }
+    bannerImage
+}
