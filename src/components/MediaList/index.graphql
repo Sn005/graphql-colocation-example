@@ -1,0 +1,10 @@
+fragment MediaList on Query {
+  Page {
+    pageInfo {
+      total
+    }
+    media(season: $season, seasonYear: $seasonYear) {
+      ...Results
+    }
+  }
+}

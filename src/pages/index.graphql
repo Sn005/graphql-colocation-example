@@ -1,0 +1,3 @@
+query HomePage($season: MediaSeason, $seasonYear: Int) {
+  ...MediaList
+}

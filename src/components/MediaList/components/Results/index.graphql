@@ -1,4 +1,4 @@
-fragment Media on Media {
+fragment Results on Media {
     title{
       native
     }

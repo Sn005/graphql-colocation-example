@@ -4307,7 +4307,7 @@ export type UserModData = {
   counts?: Maybe<Scalars['Json']>;
 };
 
-export type MediaFragment = (
+export type ResultsFragment = (
   { __typename?: 'Media' }
   & Pick<Media, 'bannerImage'>
   & { title?: Maybe<(
@@ -4316,40 +4316,56 @@ export type MediaFragment = (
   )> }
 );
 
+export type MediaListFragment = (
+  { __typename?: 'Query' }
+  & { Page?: Maybe<(
+    { __typename?: 'Page' }
+    & { pageInfo?: Maybe<(
+      { __typename?: 'PageInfo' }
+      & Pick<PageInfo, 'total'>
+    )>, media?: Maybe<Array<Maybe<(
+      { __typename?: 'Media' }
+      & ResultsFragment
+    )>>> }
+  )> }
+);
+
 export type HomePageQueryVariables = Exact<{
-  startedAt?: Maybe<Scalars['FuzzyDateInt']>;
-  completedAt?: Maybe<Scalars['FuzzyDateInt']>;
+  season?: Maybe<MediaSeason>;
+  seasonYear?: Maybe<Scalars['Int']>;
 }>;
 
 
 export type HomePageQuery = (
   { __typename?: 'Query' }
-  & { MediaList?: Maybe<(
-    { __typename?: 'MediaList' }
-    & { media?: Maybe<(
-      { __typename?: 'Media' }
-      & MediaFragment
-    )> }
-  )> }
+  & MediaListFragment
 );
 
-export const MediaFragmentDoc = gql`
-    fragment Media on Media {
+export const ResultsFragmentDoc = gql`
+    fragment Results on Media {
   title {
     native
   }
   bannerImage
 }
     `;
-export const HomePageDocument = gql`
-    query HomePage($startedAt: FuzzyDateInt, $completedAt: FuzzyDateInt) {
-  MediaList(startedAt: $startedAt, completedAt: $completedAt) {
-    media {
-      ...Media
+export const MediaListFragmentDoc = gql`
+    fragment MediaList on Query {
+  Page {
+    pageInfo {
+      total
+    }
+    media(season: $season, seasonYear: $seasonYear) {
+      ...Results
     }
   }
 }
-    ${MediaFragmentDoc}`;
+    ${ResultsFragmentDoc}`;
+export const HomePageDocument = gql`
+    query HomePage($season: MediaSeason, $seasonYear: Int) {
+  ...MediaList
+}
+    ${MediaListFragmentDoc}`;
 
 /**
  * __useHomePageQuery__
@@ -4363,8 +4379,8 @@ export const HomePageDocument = gql`
  * @example
  * const { data, loading, error } = useHomePageQuery({
  *   variables: {
- *      startedAt: // value for 'startedAt'
- *      completedAt: // value for 'completedAt'
+ *      season: // value for 'season'
+ *      seasonYear: // value for 'seasonYear'
  *   },
  * });
  */
