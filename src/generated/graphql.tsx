@@ -4330,13 +4330,13 @@ export type MediaListFragment = (
   )> }
 );
 
-export type HomePageQueryVariables = Exact<{
+export type SearchPageQueryVariables = Exact<{
   season?: Maybe<MediaSeason>;
   seasonYear?: Maybe<Scalars['Int']>;
 }>;
 
 
-export type HomePageQuery = (
+export type SearchPageQuery = (
   { __typename?: 'Query' }
   & MediaListFragment
 );
@@ -4361,35 +4361,35 @@ export const MediaListFragmentDoc = gql`
   }
 }
     ${ResultsFragmentDoc}`;
-export const HomePageDocument = gql`
-    query HomePage($season: MediaSeason, $seasonYear: Int) {
+export const SearchPageDocument = gql`
+    query SearchPage($season: MediaSeason, $seasonYear: Int) {
   ...MediaList
 }
     ${MediaListFragmentDoc}`;
 
 /**
- * __useHomePageQuery__
+ * __useSearchPageQuery__
  *
- * To run a query within a React component, call `useHomePageQuery` and pass it any options that fit your needs.
- * When your component renders, `useHomePageQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * To run a query within a React component, call `useSearchPageQuery` and pass it any options that fit your needs.
+ * When your component renders, `useSearchPageQuery` returns an object from Apollo Client that contains loading, error, and data properties
  * you can use to render your UI.
  *
  * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
  *
  * @example
- * const { data, loading, error } = useHomePageQuery({
+ * const { data, loading, error } = useSearchPageQuery({
  *   variables: {
  *      season: // value for 'season'
  *      seasonYear: // value for 'seasonYear'
  *   },
  * });
  */
-export function useHomePageQuery(baseOptions?: Apollo.QueryHookOptions<HomePageQuery, HomePageQueryVariables>) {
-        return Apollo.useQuery<HomePageQuery, HomePageQueryVariables>(HomePageDocument, baseOptions);
+export function useSearchPageQuery(baseOptions?: Apollo.QueryHookOptions<SearchPageQuery, SearchPageQueryVariables>) {
+        return Apollo.useQuery<SearchPageQuery, SearchPageQueryVariables>(SearchPageDocument, baseOptions);
       }
-export function useHomePageLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<HomePageQuery, HomePageQueryVariables>) {
-          return Apollo.useLazyQuery<HomePageQuery, HomePageQueryVariables>(HomePageDocument, baseOptions);
+export function useSearchPageLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<SearchPageQuery, SearchPageQueryVariables>) {
+          return Apollo.useLazyQuery<SearchPageQuery, SearchPageQueryVariables>(SearchPageDocument, baseOptions);
         }
-export type HomePageQueryHookResult = ReturnType<typeof useHomePageQuery>;
-export type HomePageLazyQueryHookResult = ReturnType<typeof useHomePageLazyQuery>;
-export type HomePageQueryResult = Apollo.QueryResult<HomePageQuery, HomePageQueryVariables>;
+export type SearchPageQueryHookResult = ReturnType<typeof useSearchPageQuery>;
+export type SearchPageLazyQueryHookResult = ReturnType<typeof useSearchPageLazyQuery>;
+export type SearchPageQueryResult = Apollo.QueryResult<SearchPageQuery, SearchPageQueryVariables>;

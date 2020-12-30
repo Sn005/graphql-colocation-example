@@ -1,21 +1,33 @@
 import React, { FC } from "react";
 import { GetStaticProps } from 'next'
-import Head from "next/head";
-import styles from "../styles/Home.module.css";
-import { useHomePageQuery, MediaSeason } from "@/src/generated/graphql";
+import { createClient } from 'urql'
+import { filter } from "graphql-anywhere";
+// import Head from "next/head";
+// import styles from "../styles/Home.module.css";
+import { SearchPageQuery, SearchPageDocument, MediaListFragment, MediaListFragmentDoc } from "@/src/generated/graphql";
+import MediaList from "@/src/components/MediaList"
 
-// export const getStaticProps: GetStaticProps = async (context) => {
-//   // const {data} = useHomePageQuery( { variables: { season: MediaSeason.Winter, seasonYear: 2020 } })
-//   const { data, loading, error } = useHomePageQuery({
-//     variables: {
-//        season:  MediaSeason.Winter,
-//        seasonYear: 2020
-//     },
-//   });
-// }
+const client = createClient({
+  url: 'https://graphql.anilist.co'
+})
 
-const Home:FC<> = () => {
+export const getStaticProps: GetStaticProps = async (context) => {
+  const { data } = await client
+    .query<SearchPageQuery>(SearchPageDocument, { query: 'type:issue language:go' })
+    .toPromise()
+  return {
+    props: {
+      data,
+    },
+  }
+}
 
+const Home:FC<{data: SearchPageQuery}> = ({data}) => {
+  return (
+    <>
+      <MediaList data={filter<MediaListFragment>(MediaListFragmentDoc, data)} />
+    </>
+  );
 }
 export default Home
 // export default function Home() {
