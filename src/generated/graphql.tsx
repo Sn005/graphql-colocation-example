@@ -4338,7 +4338,13 @@ export type SearchPageQueryVariables = Exact<{
 
 export type SearchPageQuery = (
   { __typename?: 'Query' }
-  & MediaListFragment
+  & { Page?: Maybe<(
+    { __typename?: 'Page' }
+    & { pageInfo?: Maybe<(
+      { __typename?: 'PageInfo' }
+      & Pick<PageInfo, 'total'>
+    )> }
+  )> }
 );
 
 export const ResultsFragmentDoc = gql`
@@ -4363,9 +4369,13 @@ export const MediaListFragmentDoc = gql`
     ${ResultsFragmentDoc}`;
 export const SearchPageDocument = gql`
     query SearchPage($season: MediaSeason, $seasonYear: Int) {
-  ...MediaList
+  Page {
+    pageInfo {
+      total
+    }
+  }
 }
-    ${MediaListFragmentDoc}`;
+    `;
 
 /**
  * __useSearchPageQuery__

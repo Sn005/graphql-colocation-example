@@ -1,0 +1,42 @@
+import React, { FC, ComponentProps } from "react";
+import { GetStaticProps } from 'next'
+import { createClient } from 'urql'
+import SearchPage from "@/src/components/pages/SearchPage"
+import { SearchPageQuery, SearchPageDocument} from "@/src/generated/graphql";
+
+/**
+ * @description
+ * このレイヤーは、compoents/pages/hogeのhoge.graphqlで定義したクエリを実行するだけの層。
+ * それ以外のロジックは持ち込まない。
+ * あくまでクエリ実行とルーティング定義にのみ関心を寄せるコンポーネントに留める
+ *
+ * nits
+ * components/pagesのwrapperであるならば、propsの定義もComponentPropsで作ってしまってもよいかも？
+ * sample
+ * type Props = ComponentProps<typeof Hoge>
+ */
+
+const client = createClient({
+  url: 'https://graphql.anilist.co'
+})
+
+type Props = ComponentProps<typeof SearchPage>
+export const getStaticProps: GetStaticProps<Props> = async (context) => {
+  const { data } = await client
+    .query<SearchPageQuery>(SearchPageDocument)
+    .toPromise()
+  return {
+    props: {
+      serachPageQuery: data,
+    },
+  }
+}
+
+const Search:FC<Props> = ({serachPageQuery}) => {
+  return (
+    <>
+      <SearchPage serachPageQuery={serachPageQuery} />
+    </>
+  );
+}
+export default Search
