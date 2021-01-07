@@ -1,8 +1,13 @@
 import React, { FC, ComponentProps } from "react";
-import { GetStaticProps } from 'next'
-import { createClient } from 'urql'
-import SearchPage from "@/src/components/pages/SearchPage"
-import { SearchPageQuery, SearchPageDocument} from "@/src/generated/graphql";
+import { GetStaticProps } from "next";
+import { createClient } from "urql";
+import SearchPage from "@/src/components/pages/SearchPage";
+import {
+  SearchPageQuery,
+  SearchPageQueryVariables,
+  SearchPageDocument,
+  MediaSeason,
+} from "@/src/generated/graphql";
 
 /**
  * @description
@@ -17,26 +22,30 @@ import { SearchPageQuery, SearchPageDocument} from "@/src/generated/graphql";
  */
 
 const client = createClient({
-  url: 'https://graphql.anilist.co'
-})
+  url: "https://graphql.anilist.co/",
+});
 
-type Props = ComponentProps<typeof SearchPage>
+type Props = ComponentProps<typeof SearchPage>;
+
 export const getStaticProps: GetStaticProps<Props> = async (context) => {
   const { data } = await client
-    .query<SearchPageQuery>(SearchPageDocument)
-    .toPromise()
+    .query<SearchPageQuery, SearchPageQueryVariables>(SearchPageDocument, {
+      season: MediaSeason.Winter,
+      seasonYear: 2017,
+    })
+    .toPromise();
   return {
     props: {
-      serachPageQuery: data,
+      searchPageQuery: data,
     },
-  }
-}
+  };
+};
 
-const Search:FC<Props> = ({serachPageQuery}) => {
+const Search: FC<Props> = ({ searchPageQuery }) => {
   return (
     <>
-      <SearchPage serachPageQuery={serachPageQuery} />
+      <SearchPage searchPageQuery={searchPageQuery} />
     </>
   );
-}
-export default Search
+};
+export default Search;

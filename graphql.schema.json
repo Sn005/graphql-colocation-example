@@ -2255,7 +2255,7 @@
               },
               {
                 "name": "userId",
-                "description": "Filter by media id",
+                "description": "Filter by user id",
                 "type": {
                   "kind": "SCALAR",
                   "name": "Int",
@@ -5743,7 +5743,7 @@
               },
               {
                 "name": "userId",
-                "description": "Filter by media id",
+                "description": "Filter by user id",
                 "type": {
                   "kind": "SCALAR",
                   "name": "Int",
@@ -24647,7 +24647,7 @@
               },
               {
                 "name": "userId",
-                "description": "Filter by media id",
+                "description": "Filter by user id",
                 "type": {
                   "kind": "SCALAR",
                   "name": "Int",

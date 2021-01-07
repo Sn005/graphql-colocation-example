@@ -1,7 +1,5 @@
 query SearchPage($season: MediaSeason, $seasonYear: Int) {
   Page {
-    pageInfo {
-      total
-    }
+    ...MediaList
   }
 }

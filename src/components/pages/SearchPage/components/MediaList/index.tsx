@@ -1,18 +1,34 @@
-import React, {FC} from "react"
-import { filter } from "graphql-anywhere";
-import {ResultsFragment, ResultsFragmentDoc, MediaListFragment} from  "@/src/generated/graphql"
-import {Results} from "./components/Results"
+import React, { FC } from "react";
+// import Image from "next/image";
+import {
+  MediaListFragment,
+  MediaListItemFragment,
+} from "@/src/generated/graphql";
 
-type Props = {
-  mediaList: MediaListFragment;
-};
-
-const MediaList:FC<Props> =({mediaList}) => {
+export const MediaListItem: FC<{
+  fragment: MediaListItemFragment;
+}> = ({ fragment }) => {
+  const title = fragment.title.native;
+  const bannerImage = fragment.bannerImage;
   return (
     <>
-      <Results media={filter<ResultsFragment>(ResultsFragmentDoc, mediaList)} />
+      <h2>{title}</h2>
+      <img src={bannerImage} alt={title} />
     </>
   );
-}
+};
 
-export default MediaList
+const MediaList: FC<{
+  fragment: MediaListFragment;
+}> = ({ fragment }) => {
+  const { media } = fragment;
+  return (
+    <>
+      {media.map((v) => (
+        <MediaListItem key={v.title.native} fragment={v} />
+      ))}
+    </>
+  );
+};
+
+export default MediaList;

@@ -1,10 +1,11 @@
-fragment MediaList on Query {
-  Page {
-    pageInfo {
-      total
-    }
-    media(season: $season, seasonYear: $seasonYear) {
-      ...Results
-    }
+fragment MediaList on Page {
+  media(season: $season, seasonYear: $seasonYear) {
+    ...MediaListItem
   }
+}
+fragment MediaListItem on Media {
+  title {
+    native
+  }
+  bannerImage
 }

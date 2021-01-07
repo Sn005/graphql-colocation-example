@@ -1,6 +1,0 @@
-fragment Results on Media {
-    title{
-      native
-    }
-    bannerImage
-}

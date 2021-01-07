@@ -15,13 +15,15 @@ import MediaList from "@/src/components/pages/SearchPage/components/MediaList"
  */
 
 type Props = {
-  serachPageQuery:SearchPageQuery
+  searchPageQuery:SearchPageQuery
 }
 
-const SearchPage:FC<Props> = ({serachPageQuery}) => {
+const SearchPage:FC<Props> = ({searchPageQuery}) => {
+  const { Page } = searchPageQuery
   return (
     <>
-      <MediaList mediaList={filter<MediaListFragment>(MediaListFragmentDoc, serachPageQuery)} />
+      {/* <MediaList mediaList={searchPageQuery.Page} /> */}
+      <MediaList fragment={filter<MediaListFragment>(MediaListFragmentDoc, Page)} />
     </>
   );
 }

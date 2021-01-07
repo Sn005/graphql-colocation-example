@@ -4308,6 +4308,14 @@ export type UserModData = {
 };
 
 export type ResultsFragment = (
+  { __typename?: 'Page' }
+  & { media?: Maybe<Array<Maybe<(
+    { __typename?: 'Media' }
+    & ResultFragment
+  )>>> }
+);
+
+export type ResultFragment = (
   { __typename?: 'Media' }
   & Pick<Media, 'bannerImage'>
   & { title?: Maybe<(
@@ -4317,16 +4325,19 @@ export type ResultsFragment = (
 );
 
 export type MediaListFragment = (
-  { __typename?: 'Query' }
-  & { Page?: Maybe<(
-    { __typename?: 'Page' }
-    & { pageInfo?: Maybe<(
-      { __typename?: 'PageInfo' }
-      & Pick<PageInfo, 'total'>
-    )>, media?: Maybe<Array<Maybe<(
-      { __typename?: 'Media' }
-      & ResultsFragment
-    )>>> }
+  { __typename?: 'Page' }
+  & { media?: Maybe<Array<Maybe<(
+    { __typename?: 'Media' }
+    & MediaListItemFragment
+  )>>> }
+);
+
+export type MediaListItemFragment = (
+  { __typename?: 'Media' }
+  & Pick<Media, 'bannerImage'>
+  & { title?: Maybe<(
+    { __typename?: 'MediaTitle' }
+    & Pick<MediaTitle, 'native'>
   )> }
 );
 
@@ -4340,15 +4351,27 @@ export type SearchPageQuery = (
   { __typename?: 'Query' }
   & { Page?: Maybe<(
     { __typename?: 'Page' }
-    & { pageInfo?: Maybe<(
-      { __typename?: 'PageInfo' }
-      & Pick<PageInfo, 'total'>
-    )> }
+    & MediaListFragment
   )> }
 );
 
+export const ResultFragmentDoc = gql`
+    fragment Result on Media {
+  title {
+    native
+  }
+  bannerImage
+}
+    `;
 export const ResultsFragmentDoc = gql`
-    fragment Results on Media {
+    fragment Results on Page {
+  media(season: $season, seasonYear: $seasonYear) {
+    ...Result
+  }
+}
+    ${ResultFragmentDoc}`;
+export const MediaListItemFragmentDoc = gql`
+    fragment MediaListItem on Media {
   title {
     native
   }
@@ -4356,26 +4379,19 @@ export const ResultsFragmentDoc = gql`
 }
     `;
 export const MediaListFragmentDoc = gql`
-    fragment MediaList on Query {
-  Page {
-    pageInfo {
-      total
-    }
-    media(season: $season, seasonYear: $seasonYear) {
-      ...Results
-    }
+    fragment MediaList on Page {
+  media(season: $season, seasonYear: $seasonYear) {
+    ...MediaListItem
   }
 }
-    ${ResultsFragmentDoc}`;
+    ${MediaListItemFragmentDoc}`;
 export const SearchPageDocument = gql`
     query SearchPage($season: MediaSeason, $seasonYear: Int) {
   Page {
-    pageInfo {
-      total
-    }
+    ...MediaList
   }
 }
-    `;
+    ${MediaListFragmentDoc}`;
 
 /**
  * __useSearchPageQuery__
