@@ -9,11 +9,11 @@ export const MediaListItem: FC<{
   fragment: MediaListItemFragment;
 }> = ({ fragment }) => {
   const title = fragment.title.native;
-  const bannerImage = fragment.bannerImage;
+  const imagePath = fragment.coverImage.large
   return (
     <>
       <h2>{title}</h2>
-      <img src={bannerImage} alt={title} />
+      <img src={imagePath} alt={title} />
     </>
   );
 };
@@ -24,6 +24,7 @@ const MediaList: FC<{
   const { media } = fragment;
   return (
     <>
+      {/* <Image src="/vercel.svg" width="200" height="auto" /> */}
       {media.map((v) => (
         <MediaListItem key={v.title.native} fragment={v} />
       ))}

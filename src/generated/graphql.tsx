@@ -4307,23 +4307,6 @@ export type UserModData = {
   counts?: Maybe<Scalars['Json']>;
 };
 
-export type ResultsFragment = (
-  { __typename?: 'Page' }
-  & { media?: Maybe<Array<Maybe<(
-    { __typename?: 'Media' }
-    & ResultFragment
-  )>>> }
-);
-
-export type ResultFragment = (
-  { __typename?: 'Media' }
-  & Pick<Media, 'bannerImage'>
-  & { title?: Maybe<(
-    { __typename?: 'MediaTitle' }
-    & Pick<MediaTitle, 'native'>
-  )> }
-);
-
 export type MediaListFragment = (
   { __typename?: 'Page' }
   & { media?: Maybe<Array<Maybe<(
@@ -4334,10 +4317,12 @@ export type MediaListFragment = (
 
 export type MediaListItemFragment = (
   { __typename?: 'Media' }
-  & Pick<Media, 'bannerImage'>
   & { title?: Maybe<(
     { __typename?: 'MediaTitle' }
     & Pick<MediaTitle, 'native'>
+  )>, coverImage?: Maybe<(
+    { __typename?: 'MediaCoverImage' }
+    & Pick<MediaCoverImage, 'large'>
   )> }
 );
 
@@ -4355,27 +4340,14 @@ export type SearchPageQuery = (
   )> }
 );
 
-export const ResultFragmentDoc = gql`
-    fragment Result on Media {
-  title {
-    native
-  }
-  bannerImage
-}
-    `;
-export const ResultsFragmentDoc = gql`
-    fragment Results on Page {
-  media(season: $season, seasonYear: $seasonYear) {
-    ...Result
-  }
-}
-    ${ResultFragmentDoc}`;
 export const MediaListItemFragmentDoc = gql`
     fragment MediaListItem on Media {
   title {
     native
   }
-  bannerImage
+  coverImage {
+    large
+  }
 }
     `;
 export const MediaListFragmentDoc = gql`
