@@ -1,7 +1,14 @@
-import React, { FC } from "react"
+import React, { FC } from "react";
 import { filter } from "graphql-anywhere";
-import { SearchPageQuery, MediaListFragment, MediaListFragmentDoc } from "@/src/generated/graphql";
-import MediaList from "@/src/components/pages/SearchPage/components/MediaList"
+import Container from "@material-ui/core/Container";
+import Typography from "@material-ui/core/Typography";
+import Box from "@material-ui/core/Box";
+import {
+  SearchPageQuery,
+  MediaListFragment,
+  MediaListFragmentDoc,
+} from "@/src/generated/graphql";
+import MediaList from "@/src/components/pages/SearchPage/components/MediaList";
 
 /**
  * @description
@@ -15,16 +22,22 @@ import MediaList from "@/src/components/pages/SearchPage/components/MediaList"
  */
 
 type Props = {
-  searchPageQuery:SearchPageQuery
-}
+  searchPageQuery: SearchPageQuery;
+};
 
-const SearchPage:FC<Props> = ({searchPageQuery}) => {
-  const { Page } = searchPageQuery
+const SearchPage: FC<Props> = ({ searchPageQuery }) => {
+  const { Page } = searchPageQuery;
   return (
-    <>
-      {/* <MediaList mediaList={searchPageQuery.Page} /> */}
-      <MediaList fragment={filter<MediaListFragment>(MediaListFragmentDoc, Page)} />
-    </>
+    <Container maxWidth="sm">
+      <Box color="primary.main" bgcolor="background.paper">
+        <Typography variant="h4" component="h1" gutterBottom>
+          Next.js example
+        </Typography>
+        <MediaList
+          fragment={filter<MediaListFragment>(MediaListFragmentDoc, Page)}
+        />
+      </Box>
+    </Container>
   );
-}
-export default SearchPage
+};
+export default SearchPage;
