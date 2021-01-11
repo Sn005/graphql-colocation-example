@@ -28,8 +28,8 @@ type Props = {
 const SearchPage: FC<Props> = ({ searchPageQuery }) => {
   const { Page } = searchPageQuery;
   return (
-    <Container maxWidth="sm">
-      <Box color="primary.main" bgcolor="background.paper">
+    <Container>
+      <Box color="primary.main">
         <Typography variant="h4" component="h1" gutterBottom>
           Next.js example
         </Typography>

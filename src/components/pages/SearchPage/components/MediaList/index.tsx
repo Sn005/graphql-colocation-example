@@ -1,5 +1,9 @@
 import React, { FC } from "react";
-// import Image from "next/image";
+
+import GridList from "@material-ui/core/GridList";
+import GridListTile from "@material-ui/core/GridListTile";
+import GridListTileBar from "@material-ui/core/GridListTileBar";
+
 import {
   MediaListFragment,
   MediaListItemFragment,
@@ -9,11 +13,11 @@ export const MediaListItem: FC<{
   fragment: MediaListItemFragment;
 }> = ({ fragment }) => {
   const title = fragment.title.native;
-  const imagePath = fragment.coverImage.large
+  const imagePath = fragment.coverImage.extraLarge;
   return (
     <>
-      <h2>{title}</h2>
-      <img src={imagePath} alt={title} />
+      <GridListTileBar title={title} />
+      <img src={imagePath} alt={title} width="100%" />
     </>
   );
 };
@@ -23,12 +27,13 @@ const MediaList: FC<{
 }> = ({ fragment }) => {
   const { media } = fragment;
   return (
-    <>
-      {/* <Image src="/vercel.svg" width="200" height="auto" /> */}
+    <GridList cellHeight={360}>
       {media.map((v) => (
-        <MediaListItem key={v.title.native} fragment={v} />
+        <GridListTile key={v.title.native}>
+          <MediaListItem fragment={v} />
+        </GridListTile>
       ))}
-    </>
+    </GridList>
   );
 };
 

@@ -4322,7 +4322,7 @@ export type MediaListItemFragment = (
     & Pick<MediaTitle, 'native'>
   )>, coverImage?: Maybe<(
     { __typename?: 'MediaCoverImage' }
-    & Pick<MediaCoverImage, 'large'>
+    & Pick<MediaCoverImage, 'extraLarge'>
   )> }
 );
 
@@ -4346,7 +4346,7 @@ export const MediaListItemFragmentDoc = gql`
     native
   }
   coverImage {
-    large
+    extraLarge
   }
 }
     `;
