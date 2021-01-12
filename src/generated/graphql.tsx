@@ -4318,6 +4318,11 @@ export type MediaListItemFragment = (
   )> }
 );
 
+export type SeasonSelectorsFragment = (
+  { __typename?: 'Media' }
+  & Pick<Media, 'season' | 'seasonYear'>
+);
+
 export type SearchPageQueryVariables = Exact<{
   season?: Maybe<MediaSeason>;
   seasonYear?: Maybe<Scalars['Int']>;
@@ -4330,7 +4335,7 @@ export type SearchPageQuery = (
     { __typename?: 'Page' }
     & { media?: Maybe<Array<Maybe<(
       { __typename?: 'Media' }
-      & Pick<Media, 'season'>
+      & SeasonSelectorsFragment
       & MediaListItemFragment
     )>>> }
   )> }
@@ -4346,16 +4351,23 @@ export const MediaListItemFragmentDoc = gql`
   }
 }
     `;
+export const SeasonSelectorsFragmentDoc = gql`
+    fragment SeasonSelectors on Media {
+  season
+  seasonYear
+}
+    `;
 export const SearchPageDocument = gql`
     query SearchPage($season: MediaSeason, $seasonYear: Int) {
   Page {
     media(season: $season, seasonYear: $seasonYear) {
-      season
+      ...SeasonSelectors
       ...MediaListItem
     }
   }
 }
-    ${MediaListItemFragmentDoc}`;
+    ${SeasonSelectorsFragmentDoc}
+${MediaListItemFragmentDoc}`;
 
 /**
  * __useSearchPageQuery__

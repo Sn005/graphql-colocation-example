@@ -1,0 +1,4 @@
+fragment SeasonSelectors on Media {
+  season,
+  seasonYear
+}

@@ -31,7 +31,7 @@ export const getStaticProps: GetStaticProps<Props> = async (context) => {
   const { data } = await client
     .query<SearchPageQuery, SearchPageQueryVariables>(SearchPageDocument, {
       season: MediaSeason.Winter,
-      seasonYear: 2017,
+      seasonYear: Number(new Date().getFullYear()),
     })
     .toPromise();
   return {

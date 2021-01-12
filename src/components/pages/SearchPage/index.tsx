@@ -1,14 +1,17 @@
-import React, { FC } from "react";
+import React, { FC, useCallback } from "react";
 import { filter } from "graphql-anywhere";
 import Container from "@material-ui/core/Container";
 import Typography from "@material-ui/core/Typography";
 import Box from "@material-ui/core/Box";
 import {
   SearchPageQuery,
+  SeasonSelectorsFragment,
+  SeasonSelectorsFragmentDoc,
   MediaListItemFragment,
   MediaListItemFragmentDoc,
 } from "@/src/generated/graphql";
 import MediaList from "@/src/components/pages/SearchPage/components/MediaList";
+import SeasonSelectors from "@/src/components/pages/SearchPage/components/SeasonSelectors";
 
 /**
  * @description
@@ -27,14 +30,30 @@ type Props = {
 
 const SearchPage: FC<Props> = ({ searchPageQuery }) => {
   const { Page } = searchPageQuery;
+  const handleChangeSeason = useCallback(
+    (target: "season" | "seasonYear", value: string) => {
+      console.log(target, value);
+    },
+    []
+  );
   return (
     <Container>
       <Box color="primary.main">
         <Typography variant="h4" component="h1" gutterBottom>
           Next.js example
         </Typography>
+        <SeasonSelectors
+          handleChange={handleChangeSeason}
+          fragment={filter<SeasonSelectorsFragment[]>(
+            SeasonSelectorsFragmentDoc,
+            Page.media
+          )}
+        />
         <MediaList
-          mediaList={filter<MediaListItemFragment[]>(MediaListItemFragmentDoc, Page.media)}
+          mediaList={filter<MediaListItemFragment[]>(
+            MediaListItemFragmentDoc,
+            Page.media
+          )}
         />
       </Box>
     </Container>
