@@ -1,8 +1,0 @@
-fragment MediaListItem on Media {
-  title {
-    native
-  }
-  coverImage {
-    extraLarge
-  }
-}

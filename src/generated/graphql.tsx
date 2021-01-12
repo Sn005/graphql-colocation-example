@@ -4307,6 +4307,29 @@ export type UserModData = {
   counts?: Maybe<Scalars['Json']>;
 };
 
+export type SearchPageQueryVariables = Exact<{
+  season?: Maybe<MediaSeason>;
+  seasonYear?: Maybe<Scalars['Int']>;
+}>;
+
+
+export type SearchPageQuery = (
+  { __typename?: 'Query' }
+  & { Page?: Maybe<(
+    { __typename?: 'Page' }
+    & SeasonSelectorsFragment
+    & MediaListFragment
+  )> }
+);
+
+export type MediaListFragment = (
+  { __typename?: 'Page' }
+  & { media?: Maybe<Array<Maybe<(
+    { __typename?: 'Media' }
+    & MediaListItemFragment
+  )>>> }
+);
+
 export type MediaListItemFragment = (
   { __typename?: 'Media' }
   & { title?: Maybe<(
@@ -4319,26 +4342,11 @@ export type MediaListItemFragment = (
 );
 
 export type SeasonSelectorsFragment = (
-  { __typename?: 'Media' }
-  & Pick<Media, 'season' | 'seasonYear'>
-);
-
-export type SearchPageQueryVariables = Exact<{
-  season?: Maybe<MediaSeason>;
-  seasonYear?: Maybe<Scalars['Int']>;
-}>;
-
-
-export type SearchPageQuery = (
-  { __typename?: 'Query' }
-  & { Page?: Maybe<(
-    { __typename?: 'Page' }
-    & { media?: Maybe<Array<Maybe<(
-      { __typename?: 'Media' }
-      & SeasonSelectorsFragment
-      & MediaListItemFragment
-    )>>> }
-  )> }
+  { __typename?: 'Page' }
+  & { media?: Maybe<Array<Maybe<(
+    { __typename?: 'Media' }
+    & Pick<Media, 'season' | 'seasonYear'>
+  )>>> }
 );
 
 export const MediaListItemFragmentDoc = gql`
@@ -4351,23 +4359,30 @@ export const MediaListItemFragmentDoc = gql`
   }
 }
     `;
+export const MediaListFragmentDoc = gql`
+    fragment MediaList on Page {
+  media(season: $season, seasonYear: $seasonYear) {
+    ...MediaListItem
+  }
+}
+    ${MediaListItemFragmentDoc}`;
 export const SeasonSelectorsFragmentDoc = gql`
-    fragment SeasonSelectors on Media {
-  season
-  seasonYear
+    fragment SeasonSelectors on Page {
+  media(season: $season, seasonYear: $seasonYear) {
+    season
+    seasonYear
+  }
 }
     `;
 export const SearchPageDocument = gql`
     query SearchPage($season: MediaSeason, $seasonYear: Int) {
   Page {
-    media(season: $season, seasonYear: $seasonYear) {
-      ...SeasonSelectors
-      ...MediaListItem
-    }
+    ...SeasonSelectors
+    ...MediaList
   }
 }
     ${SeasonSelectorsFragmentDoc}
-${MediaListItemFragmentDoc}`;
+${MediaListFragmentDoc}`;
 
 /**
  * __useSearchPageQuery__

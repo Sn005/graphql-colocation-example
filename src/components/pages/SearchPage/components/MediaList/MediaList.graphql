@@ -1,0 +1,14 @@
+fragment MediaList on Page {
+  media(season: $season, seasonYear: $seasonYear) {
+    ...MediaListItem
+  }
+}
+
+fragment MediaListItem on Media {
+  title {
+    native
+  }
+  coverImage {
+    extraLarge
+  }
+}

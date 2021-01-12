@@ -4,31 +4,61 @@ import InputLabel from "@material-ui/core/InputLabel";
 import FormControl from "@material-ui/core/FormControl";
 import Select from "@material-ui/core/Select";
 
-import { SeasonSelectorsFragment } from "@/src/generated/graphql";
+import { SeasonSelectorsFragment, MediaSeason } from "@/src/generated/graphql";
 const yearsPeriod = 20;
 const SeasonSelectors: FC<{
   handleChange: (target: "season" | "seasonYear", value: string) => void;
-  fragment: SeasonSelectorsFragment[];
+  fragment: SeasonSelectorsFragment;
 }> = ({ handleChange, fragment }) => {
-  const handleChangeSeason = (value) => {
-    handleChange("season", value);
-  };
-  const menus = useMemo(() => {
-    const [first] = fragment;
-    const { seasonYear } = first;
+  const firstMedia = fragment.media[0];
+  const selectedYear = firstMedia.seasonYear;
+  const selectedSeason = firstMedia.season;
+
+  const yearMenus = useMemo(() => {
     return [...Array(yearsPeriod)].map((_, i) => {
-      const year = seasonYear - i;
-      return <MenuItem value={year}>{year}</MenuItem>;
+      const year = selectedYear - i;
+      return (
+        <MenuItem key={year} value={year}>
+          {year}
+        </MenuItem>
+      );
     });
-  }, [fragment]);
+  }, [selectedYear]);
+
+  const seasonMenus = useMemo(() => {
+    return Object.entries(MediaSeason).map(([key, value]) => {
+      return (
+        <MenuItem key={value} value={value}>
+          {key}
+        </MenuItem>
+      );
+    });
+  }, []);
+
+  const handleChangeYear = (e: React.ChangeEvent<{ value: string }>) => {
+    handleChange("seasonYear", e.target.value);
+  };
+
+  const handleChangeSeason = (e: React.ChangeEvent<{ value: string }>) => {
+    handleChange("season", e.target.value);
+  };
+
   return (
     <>
       <FormControl>
+        <InputLabel id="year">Year</InputLabel>
+        <Select labelId="year" value={selectedYear} onChange={handleChangeYear}>
+          {yearMenus}
+        </Select>
+      </FormControl>
+      <FormControl>
         <InputLabel id="season">Season</InputLabel>
-        <Select labelId="season" value={2017} onChange={handleChangeSeason}>
-          {menus}
-          {/* <MenuItem value={2017}>2017</MenuItem>
-          <MenuItem value={2018}>2018</MenuItem> */}
+        <Select
+          labelId="season"
+          value={selectedSeason}
+          onChange={handleChangeSeason}
+        >
+          {seasonMenus}
         </Select>
       </FormControl>
     </>
