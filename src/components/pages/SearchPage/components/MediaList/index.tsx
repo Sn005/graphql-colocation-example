@@ -9,7 +9,6 @@ import FormControl from "@material-ui/core/FormControl";
 import Select from "@material-ui/core/Select";
 
 import {
-  MediaListFragment,
   MediaListItemFragment,
 } from "@/src/generated/graphql";
 
@@ -51,14 +50,13 @@ export const MediaListItem: FC<{
 };
 
 const MediaList: FC<{
-  fragment: MediaListFragment;
-}> = ({ fragment }) => {
-  const { media } = fragment;
+  mediaList: MediaListItemFragment[];
+}> = ({ mediaList }) => {
+  // const { media } = fragment;
   return (
     <>
-      <SeasonSelectors />
       <GridList cellHeight={360}>
-        {media.map((v) => (
+        {mediaList.map((v) => (
           <GridListTile key={v.title.native}>
             <MediaListItem fragment={v} />
           </GridListTile>

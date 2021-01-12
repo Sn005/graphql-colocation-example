@@ -5,8 +5,8 @@ import Typography from "@material-ui/core/Typography";
 import Box from "@material-ui/core/Box";
 import {
   SearchPageQuery,
-  MediaListFragment,
-  MediaListFragmentDoc,
+  MediaListItemFragment,
+  MediaListItemFragmentDoc,
 } from "@/src/generated/graphql";
 import MediaList from "@/src/components/pages/SearchPage/components/MediaList";
 
@@ -34,7 +34,7 @@ const SearchPage: FC<Props> = ({ searchPageQuery }) => {
           Next.js example
         </Typography>
         <MediaList
-          fragment={filter<MediaListFragment>(MediaListFragmentDoc, Page)}
+          mediaList={filter<MediaListItemFragment[]>(MediaListItemFragmentDoc, Page.media)}
         />
       </Box>
     </Container>

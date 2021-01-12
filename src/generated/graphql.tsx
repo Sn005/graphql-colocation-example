@@ -4307,14 +4307,6 @@ export type UserModData = {
   counts?: Maybe<Scalars['Json']>;
 };
 
-export type MediaListFragment = (
-  { __typename?: 'Page' }
-  & { media?: Maybe<Array<Maybe<(
-    { __typename?: 'Media' }
-    & MediaListItemFragment
-  )>>> }
-);
-
 export type MediaListItemFragment = (
   { __typename?: 'Media' }
   & { title?: Maybe<(
@@ -4336,7 +4328,11 @@ export type SearchPageQuery = (
   { __typename?: 'Query' }
   & { Page?: Maybe<(
     { __typename?: 'Page' }
-    & MediaListFragment
+    & { media?: Maybe<Array<Maybe<(
+      { __typename?: 'Media' }
+      & Pick<Media, 'season'>
+      & MediaListItemFragment
+    )>>> }
   )> }
 );
 
@@ -4350,20 +4346,16 @@ export const MediaListItemFragmentDoc = gql`
   }
 }
     `;
-export const MediaListFragmentDoc = gql`
-    fragment MediaList on Page {
-  media(season: $season, seasonYear: $seasonYear) {
-    ...MediaListItem
-  }
-}
-    ${MediaListItemFragmentDoc}`;
 export const SearchPageDocument = gql`
     query SearchPage($season: MediaSeason, $seasonYear: Int) {
   Page {
-    ...MediaList
+    media(season: $season, seasonYear: $seasonYear) {
+      season
+      ...MediaListItem
+    }
   }
 }
-    ${MediaListFragmentDoc}`;
+    ${MediaListItemFragmentDoc}`;
 
 /**
  * __useSearchPageQuery__
