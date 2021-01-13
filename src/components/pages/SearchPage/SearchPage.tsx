@@ -9,6 +9,8 @@ import {
   SeasonSelectorsFragmentDoc,
   MediaListFragment,
   MediaListFragmentDoc,
+  useSearchPageLazyQuery,
+  SearchPageQueryVariables,
 } from "@/src/generated/graphql";
 import MediaList from "@/src/components/pages/SearchPage/components/MediaList";
 import SeasonSelectors from "@/src/components/pages/SearchPage/components/SeasonSelectors";
@@ -25,17 +27,23 @@ import SeasonSelectors from "@/src/components/pages/SearchPage/components/Season
  */
 
 type Props = {
-  searchPageQuery: SearchPageQuery;
+  data: SearchPageQuery;
 };
 
-const SearchPage: FC<Props> = ({ searchPageQuery }) => {
-  const { Page } = searchPageQuery;
+const SearchPage: FC<Props> = ({ data }) => {
+  const [
+    fetchSearchPageQuery,
+    { data: lazyData, loading: lazyLoading },
+  ] = useSearchPageLazyQuery();
   const handleChangeSeason = useCallback(
-    (target: "season" | "seasonYear", value: string) => {
+    (target: "season" | "seasonYear", value: SearchPageQueryVariables) => {
       console.log(target, value);
+      fetchSearchPageQuery({ variables: value });
     },
-    []
+    [fetchSearchPageQuery]
   );
+
+  const { Page } = lazyData || data;
   return (
     <Container>
       <Box color="primary.main">
@@ -49,12 +57,13 @@ const SearchPage: FC<Props> = ({ searchPageQuery }) => {
             Page
           )}
         />
-        <MediaList
-          fragment={filter<MediaListFragment>(
-            MediaListFragmentDoc,
-            Page
-          )}
-        />
+        {lazyLoading ? (
+          <p>Loading...</p>
+        ) : (
+          <MediaList
+            fragment={filter<MediaListFragment>(MediaListFragmentDoc, Page)}
+          />
+        )}
       </Box>
     </Container>
   );

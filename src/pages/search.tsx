@@ -36,15 +36,15 @@ export const getStaticProps: GetStaticProps<Props> = async (context) => {
     .toPromise();
   return {
     props: {
-      searchPageQuery: data,
+      data
     },
   };
 };
 
-const Search: FC<Props> = ({ searchPageQuery }) => {
+const Search: FC<Props> = ({ data }) => {
   return (
     <>
-      <SearchPage searchPageQuery={searchPageQuery} />
+      <SearchPage data={data} />
     </>
   );
 };

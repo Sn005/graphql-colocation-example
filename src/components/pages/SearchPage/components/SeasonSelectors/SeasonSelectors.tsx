@@ -4,10 +4,18 @@ import InputLabel from "@material-ui/core/InputLabel";
 import FormControl from "@material-ui/core/FormControl";
 import Select from "@material-ui/core/Select";
 
-import { SeasonSelectorsFragment, MediaSeason } from "@/src/generated/graphql";
+import {
+  SeasonSelectorsFragment,
+  MediaSeason,
+  SearchPageQueryVariables,
+} from "@/src/generated/graphql";
 const yearsPeriod = 20;
+const currentYear = new Date().getFullYear();
 const SeasonSelectors: FC<{
-  handleChange: (target: "season" | "seasonYear", value: string) => void;
+  handleChange: (
+    target: "season" | "seasonYear",
+    value: SearchPageQueryVariables
+  ) => void;
   fragment: SeasonSelectorsFragment;
 }> = ({ handleChange, fragment }) => {
   const firstMedia = fragment.media[0];
@@ -16,14 +24,14 @@ const SeasonSelectors: FC<{
 
   const yearMenus = useMemo(() => {
     return [...Array(yearsPeriod)].map((_, i) => {
-      const year = selectedYear - i;
+      const year = currentYear - i;
       return (
         <MenuItem key={year} value={year}>
           {year}
         </MenuItem>
       );
     });
-  }, [selectedYear]);
+  }, []);
 
   const seasonMenus = useMemo(() => {
     return Object.entries(MediaSeason).map(([key, value]) => {
@@ -36,11 +44,17 @@ const SeasonSelectors: FC<{
   }, []);
 
   const handleChangeYear = (e: React.ChangeEvent<{ value: string }>) => {
-    handleChange("seasonYear", e.target.value);
+    handleChange("seasonYear", {
+      season: selectedSeason,
+      seasonYear: Number(e.target.value),
+    });
   };
 
   const handleChangeSeason = (e: React.ChangeEvent<{ value: string }>) => {
-    handleChange("season", e.target.value);
+    handleChange("seasonYear", {
+      season: e.target.value as MediaSeason,
+      seasonYear: selectedYear,
+    });
   };
 
   return (

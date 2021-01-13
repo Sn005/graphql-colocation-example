@@ -1,6 +1,6 @@
 fragment SeasonSelectors on Page {
   media(season: $season, seasonYear: $seasonYear) {
-    season,
+    season
     seasonYear
   }
 }
