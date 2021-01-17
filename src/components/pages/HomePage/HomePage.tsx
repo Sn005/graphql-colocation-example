@@ -4,16 +4,16 @@ import Container from "@material-ui/core/Container";
 import Typography from "@material-ui/core/Typography";
 import Box from "@material-ui/core/Box";
 import {
-  SearchPageQuery,
+  HomePageQuery,
+  useHomePageLazyQuery,
+  HomePageQueryVariables,
   SeasonSelectorsFragment,
   SeasonSelectorsFragmentDoc,
   MediaListFragment,
   MediaListFragmentDoc,
-  useSearchPageLazyQuery,
-  SearchPageQueryVariables,
 } from "@/src/generated/graphql";
-import MediaList from "@/src/components/pages/SearchPage/components/MediaList";
-import SeasonSelectors from "@/src/components/pages/SearchPage/components/SeasonSelectors";
+import MediaList from "@/src/components/pages/HomePage/components/MediaList";
+import SeasonSelectors from "@/src/components/pages/HomePage/components/SeasonSelectors";
 
 /**
  * @description
@@ -27,17 +27,16 @@ import SeasonSelectors from "@/src/components/pages/SearchPage/components/Season
  */
 
 type Props = {
-  data: SearchPageQuery;
+  data: HomePageQuery;
 };
 
-const SearchPage: FC<Props> = ({ data }) => {
+const HomePage: FC<Props> = ({ data }) => {
   const [
     fetchSearchPageQuery,
     { data: lazyData, loading: lazyLoading },
-  ] = useSearchPageLazyQuery();
+  ] = useHomePageLazyQuery();
   const handleChangeSeason = useCallback(
-    (target: "season" | "seasonYear", value: SearchPageQueryVariables) => {
-      console.log(target, value);
+    (target: "season" | "seasonYear", value: HomePageQueryVariables) => {
       fetchSearchPageQuery({ variables: value });
     },
     [fetchSearchPageQuery]
@@ -68,4 +67,4 @@ const SearchPage: FC<Props> = ({ data }) => {
     </Container>
   );
 };
-export default SearchPage;
+export default HomePage;

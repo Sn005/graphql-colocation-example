@@ -1,6 +1,0 @@
-query SearchPage($season: MediaSeason, $seasonYear: Int) {
-  Page {
-    ...SeasonSelectors
-    ...MediaList
-  }
-}

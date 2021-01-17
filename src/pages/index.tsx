@@ -1,11 +1,11 @@
-import React, { FC, ComponentProps } from "react";
-import { GetStaticProps } from "next";
+import React from "react";
+import { GetStaticPropsContext , InferGetStaticPropsType, NextPage} from "next";
 import { createClient } from "urql";
-import SearchPage from "@/src/components/pages/SearchPage";
+import HomePage from "@/src/components/pages/HomePage";
 import {
-  SearchPageQuery,
-  SearchPageQueryVariables,
-  SearchPageDocument,
+  HomePageQuery,
+  HomePageQueryVariables,
+  HomePageDocument,
   MediaSeason,
 } from "@/src/generated/graphql";
 
@@ -25,11 +25,11 @@ const client = createClient({
   url: "https://graphql.anilist.co/",
 });
 
-type Props = ComponentProps<typeof SearchPage>;
+type Props = InferGetStaticPropsType<typeof getStaticProps>
 
-export const getStaticProps: GetStaticProps<Props> = async (context) => {
+export const getStaticProps = async (context: GetStaticPropsContext) => {
   const { data } = await client
-    .query<SearchPageQuery, SearchPageQueryVariables>(SearchPageDocument, {
+    .query<HomePageQuery, HomePageQueryVariables>(HomePageDocument, {
       season: MediaSeason.Winter,
       seasonYear: Number(new Date().getFullYear()),
     })
@@ -41,10 +41,10 @@ export const getStaticProps: GetStaticProps<Props> = async (context) => {
   };
 };
 
-const Search: FC<Props> = ({ data }) => {
+const Search: NextPage<Props> = ({ data }) => {
   return (
     <>
-      <SearchPage data={data} />
+      <HomePage data={data} />
     </>
   );
 };
