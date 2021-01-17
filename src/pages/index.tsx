@@ -42,6 +42,7 @@ export const getStaticProps = async (context: GetStaticPropsContext) => {
 };
 
 const Search: NextPage<Props> = ({ data }) => {
+  if(data === undefined) return null
   return (
     <>
       <HomePage data={data} />
